@@ -231,14 +231,16 @@ async function enviarAPI(sabor, precio, cantidad, promocion) {
     };
 
     try {
-        const response = await fetch("https://localhost:7000/api/Tickets/imprimir", {
+        // CAMBIA ESTA LÍNEA ESPECÍFICAMENTE:
+        const response = await fetch("http://127.0.0.1:7000/api/Tickets/imprimir", {
             method: 'POST',
+            mode: 'cors', // Agrega esto para evitar errores de permisos
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(datos)
         });
         return response.ok;
     } catch (error) {
-        console.error("Error de conexión con la API:", error);
+        console.error("Error de conexión:", error);
         return false;
     }
 }
