@@ -232,7 +232,7 @@ async function enviarAPI(sabor, precio, cantidad, promocion) {
 
     try {
         // CAMBIA ESTA LÍNEA ESPECÍFICAMENTE:
-        const response = await fetch("http://127.0.0.1:7000/api/Tickets/imprimir", {
+        const response = await fetch("https://127.0.0.1:7000/api/Tickets/imprimir", {
             method: 'POST',
             mode: 'cors', // Agrega esto para evitar errores de permisos
             headers: { 'Content-Type': 'application/json' },
