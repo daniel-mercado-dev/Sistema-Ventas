@@ -1,0 +1,313 @@
+﻿/* --- CONFIGURACIÓN BASE --- */
+:root {
+    --bg-dark: #0f172a;
+    --card-bg: #1e293b;
+    --text-main: #f8fafc;
+    --text-dim: #94a3b8;
+    --accent-gold: #fbbf24;
+    --accent-blue: #38bdf8;
+    --accent-green: #22c55e;
+    --accent-red: #ef4444;
+    --accent-orange: #f97316;
+    --radius: 12px;
+}
+
+body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    margin: 0;
+    padding-right: 380px; /* Espacio para el panel derecho */
+    line-height: 1.5;
+}
+
+/* --- HEADER DE SERVICIO --- */
+.header-service {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    padding: 25px;
+    border-bottom: 1px solid #334155;
+    margin-bottom: 20px;
+}
+
+.radio-group {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+    .radio-group input {
+        display: none;
+    }
+
+    .radio-group label {
+        padding: 14px 28px;
+        background: #334155;
+        border-radius: var(--radius);
+        cursor: pointer;
+        font-weight: 700;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        color: var(--text-dim);
+        border: 2px solid transparent;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+#modoMesa:checked + label {
+    background: rgba(34, 197, 94, 0.15);
+    border-color: var(--accent-green);
+    color: var(--accent-green);
+}
+
+#modoLlevar:checked + label {
+    background: rgba(249, 115, 22, 0.15);
+    border-color: var(--accent-orange);
+    color: var(--accent-orange);
+}
+
+/* --- CATEGORÍAS --- */
+.category {
+    margin: 35px auto 15px;
+    padding: 10px 20px;
+    font-size: 0.95rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--accent-gold);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 92%;
+}
+
+    .category::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: linear-gradient(90deg, #334155, transparent);
+    }
+
+/* --- CONTENEDORES --- */
+.container {
+    width: 92%;
+    margin: 0 auto;
+    display: grid;
+    gap: 12px;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+}
+
+/* --- ESTILO DE BOTONES --- */
+button {
+    border: none;
+    border-radius: var(--radius);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: white;
+    min-height: 65px;
+    padding: 12px;
+    font-size: 0.9rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+    button:hover {
+        transform: translateY(-2px);
+        filter: brightness(1.1);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+    }
+
+/* Colores por sección */
+.btn-maza {
+    background: #4f46e5;
+}
+
+.btn-mesa {
+    background: #475569;
+}
+
+.btn-pastel {
+    background: #0284c7;
+}
+
+.btn-bebidas {
+    background: #0d9488;
+}
+
+.btn-keke {
+    background: #92400e;
+}
+
+.btn-offer {
+    background: var(--accent-gold);
+    color: #1e293b;
+    font-weight: 800;
+    border: 2px solid #00000010;
+}
+
+/* --- PANEL DE CUENTA (DERECHA) --- */
+#resumen-cuenta {
+    position: fixed;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 360px;
+    background: #1e293b;
+    border-left: 1px solid #334155;
+    display: flex;
+    flex-direction: column;
+    box-shadow: -10px 0 30px rgba(0,0,0,0.3);
+}
+
+.cart-header {
+    background: #0f172a;
+    padding: 20px;
+    font-weight: 800;
+    text-align: center;
+    color: var(--accent-gold);
+    border-bottom: 1px solid #334155;
+}
+
+#lista-productos {
+    flex: 1;
+    overflow-y: auto;
+    padding: 15px;
+}
+
+.item-fila {
+    background: #334155;
+    margin-bottom: 10px;
+    padding: 15px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    position: relative;
+    border-left: 4px solid var(--accent-blue);
+}
+
+.item-info {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 700;
+}
+
+.item-tags {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    text-transform: uppercase;
+}
+
+.btn-eliminar {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #ef444420;
+    color: var(--accent-red);
+    width: 32px;
+    height: 32px;
+    min-height: auto;
+    border-radius: 8px;
+}
+
+/* --- FOOTER DEL CARRITO --- */
+.resumen-footer {
+    background: #0f172a;
+    padding: 20px;
+    border-top: 1px solid #334155;
+}
+
+#total-cuenta {
+    font-size: 1.8rem;
+    font-weight: 900;
+    color: var(--accent-green);
+    text-align: center;
+    margin-bottom: 20px;
+    padding: 10px;
+    background: rgba(34, 197, 94, 0.1);
+    border-radius: 8px;
+}
+
+.btn-cobrar {
+    background: var(--accent-green);
+    width: 100%;
+    height: 60px;
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+}
+
+.btn-limpiar {
+    background: transparent;
+    border: 1px solid #475569;
+    width: 100%;
+    height: 40px;
+    color: var(--text-dim);
+}
+
+/* --- SELECTS --- */
+select {
+    background: #334155;
+    color: white;
+    border: 1px solid #475569;
+    padding: 12px;
+    border-radius: var(--radius);
+    outline: none;
+}
+/* Animación de vibración suave */
+@keyframes vibrar {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    25% {
+        transform: rotate(1deg);
+    }
+
+    50% {
+        transform: rotate(0eg);
+    }
+
+    75% {
+        transform: rotate(-1deg);
+    }
+
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+/* Clase que aplicaremos a los botones */
+.boton-activo-promo {
+    animation: vibrar 0.3s infinite;
+    border: 2px solid #fbbf24 !important; /* Color dorado para resaltar */
+    box-shadow: 0 0 10px #fbbf24;
+    z-index: 10;
+}
+
+@keyframes latido-suave {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.03);
+    }
+    /* Crece casi nada, solo para dar señal de vida */
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* 2. Clase que activa el efecto sin cambiar colores drásticamente */
+.vibrar-ahora {
+    animation: latido-suave 1.2s ease-in-out infinite; /* Es lento y suave, no como temblor */
+    /* En lugar de un color sólido que tape el nombre, usaremos un borde que brille */
+    outline: 3px solid #fbbf24; /* Resalta el borde sin tocar el fondo */
+    outline-offset: -3px; /* Mantiene el borde por dentro */
+    /* Un pequeño resplandor externo para que se note cuál elegir */
+    box-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
+    position: relative;
+    z-index: 5;
+}
+

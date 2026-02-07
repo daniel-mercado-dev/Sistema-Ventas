@@ -1,0 +1,161 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Sistema de Ventas - Astrid</title>
+    <link rel="stylesheet" href="StyleSheet.css">
+</head>
+<body>
+
+    <div id="notificacion-flotante" style="display:none; position: fixed; bottom: 20px; left: 20px; background: #1e293b; color: white; padding: 15px 25px; border-radius: 12px; border: 2px solid #fbbf24; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.5); z-index: 9999; font-family: sans-serif;">
+        <div style="font-weight: bold; color: #fbbf24; margin-bottom: 5px;">🔥 MODO OFERTA ACTIVO</div>
+        <div id="texto-progreso">Seleccionando sabores...</div>
+        <div style="width: 100%; background: #334155; height: 8px; border-radius: 4px; margin-top: 10px;">
+            <div id="barra-progreso" style="width: 0%; background: #fbbf24; height: 100%; border-radius: 4px; transition: width 0.3s ease;"></div>
+        </div>
+        <div style="margin-top: 10px; text-align: right;">
+            <a href="javascript:void(0)" onclick="cancelarOferta()" style="color: #ef4444; font-size: 11px; font-weight: bold; text-decoration: none; text-transform: uppercase;">❌ Cancelar Promo</a>
+        </div>
+    </div>
+
+    <div class="header-service">
+        <div class="category" style="margin:0; border:none; background:none;">📍 MODO DE DESPACHO</div>
+        <div class="radio-group">
+            <input type="radio" id="modoMesa" name="destino" value="Mesa" checked>
+            <label for="modoMesa">🏠 PARA MESA</label>
+
+            <input type="radio" id="modoLlevar" name="destino" value="Llevar">
+            <label for="modoLlevar">🛍️ PARA LLEVAR</label>
+        </div>
+    </div>
+
+    <div class="category">🍽️ Mazamorras (Individuales)</div>
+    <div class="container">
+        <select id="saborMesa" style="padding:10px; font-size:18px; border-radius:10px; grid-column: span 2;">
+            <option value="Morada">Morada</option>
+            <option value="Arroz">Arroz c/ Leche</option>
+            <option value="Clasico">Clasico</option>
+            <option value="Zambito">Zambito</option>
+            <option value="Calabaza">Calabaza</option>
+            <option value="Durazno">Durazno</option>
+            <option value="Piña c/ Membrillo">Piña c/ Membrillo</option>
+            <option value="Maicena">Maicena</option>
+            <option value="Otro">Otro</option>
+        </select>
+        <button class="btn-mesa" onclick="agregarConTipo(null, 2.50, 'saborMesa')">S/ 2.50</button>
+        <button class="btn-mesa" onclick="agregarConTipo(null, 3.00, 'saborMesa')">S/ 3.00</button>
+        <button class="btn-mesa" onclick="agregarConTipo(null, 5.00, 'saborMesa')">S/ 5.00</button>
+        <button class="btn-mesa" onclick="agregarConTipo(null, 9.00, 'saborMesa')">S/ 9.00</button>
+    </div>
+
+    <div class="category">🥣 Mazamorras Ofertas (Click en 3 sabores)</div>
+    <div class="container" id="seccion-maza">
+        <button class="btn-maza" onclick="gestionarMaza('Morada')">Morada</button>
+        <button class="btn-maza" onclick="gestionarMaza('Arroz con Leche')">Arroz c/ Leche</button>
+        <button class="btn-maza" onclick="gestionarMaza('Maicena')">Maicena</button>
+        <button class="btn-maza" onclick="gestionarMaza('Clasico')">Clasico</button>
+        <button class="btn-maza" onclick="gestionarMaza('Zambito')">Zambito</button>
+        <button class="btn-maza" onclick="gestionarMaza('Calabaza')">Calabaza</button>
+        <button class="btn-maza" onclick="gestionarMaza('Durazno')">Durazno</button>
+        <button class="btn-maza" onclick="gestionarMaza('Piña')">Piña/Memb.</button>
+        <button class="btn-maza" onclick="gestionarMaza('Otro')">Otro</button>
+    </div>
+
+    <div class="container" style="margin-top:15px;">
+
+        <button class="btn-offer" onclick="activarOferta(6.00, '3x6')">OFERTA 3x6</button>
+        <button class="btn-offer" onclick="activarOferta(7.00, '3x7')">OFERTA 3x7</button>
+        <button class="btn-offer" onclick="activarOferta(12.00, '3x12')">OFERTA 3x12</button>
+
+    </div>
+
+
+
+    <div class="category">🍰 Pasteles</div>
+    <div class="container">
+        <button class="btn-pastel" onclick="gestionarPastel('Leche Asada', 3.00)">L. Asada S/3</button>
+        <button class="btn-offer" onclick="gestionarPastel('Leche Asada 3x7', 7.00)">L.Asada 3x7 S/7</button>
+        <button class="btn-pastel" onclick="gestionarPastel('Mil Hojas', 3.00)">Mil Hojas S/3</button>
+        <button class="btn-offer" onclick="gestionarPastel('Mil Hojas', 8.00)">Mil Hojas 3x8 S/3</button>
+        <button class="btn-pastel" onclick="gestionarPastel('Empanada', 3.00)">Empanada S/3</button>
+        <button class="btn-offer" onclick="gestionarPastel('Empanada 3x8', 8.00)">Empanada 3x8 S/8</button>
+        <button class="btn-pastel" onclick="gestionarPastel('Pionono', 3.00)">Pionono S/3</button>
+        <button class="btn-offer" onclick="gestionarPastel('Pionono', 8.00)">Pionono 3x8 S/3</button>
+        <button class="btn-pastel" onclick="gestionarPastel('Crema Volt.', 5.00)">Crema Volt. S/5</button>
+        <button class="btn-offer" onclick="gestionarPastel('Crema Volt.3x13', 13.00)">Crema Volt. 3x13 S/13</button>
+        <button class="btn-pastel" onclick="gestionarPastel('Torta Helada', 5.00)">Torta Hel. S/5</button>
+        <button class="btn-pastel" onclick="gestionarPastel('Torta Selva ', 5.00)">Torta  selva S/5</button>
+        <button class="btn-pastel" onclick="gestionarPastel('Torta Moka ', 5.00)">Torta Moka S/5</button>
+        <button class="btn-pastel" onclick="gestionarPastel('Torta Chocolate ', 5.00)">Torta  Chocolate S/5</button>
+        <button class="btn-pastel" onclick="gestionarPastel('Tres Leches', 5.00)">3 Leches S/5</button>
+        <button class="btn-pastel" onclick="gestionarPastel('Pye Limon', 6.00)">Pye Limon S/6</button>
+        <button class="btn-pastel" onclick="gestionarPastel('Tartaleta Fresa ', 5.00)">Tartaleta Fresa S/5</button>
+        <button class="btn-pastel" onclick="gestionarPastel('Explosion de Fresa ', 6.00)">Explosion de Fresa S/6</button>
+        <button class="btn-pastel" onclick="gestionarPastel('Tartaleta Maracuya', 5.00)">Tartaleta Maracuya S/5</button>
+        <button class="btn-pastel" onclick="gestionarPastel('Pye de manzana', 5.00)">Pye Manzana S/5</button>
+        <button class="btn-pastel" onclick="gestionarPastel('Caprichos', 5.00)">Caprichos S/5</button>
+
+    </div>
+
+    <div style="grid-column: 1 / -1; margin: 10px 0; border-top: 1px dashed #ccc; padding-top: 10px;">
+        <span style="font-size: 12px; color: #666; font-weight: bold;">ACTIVAR OFERTAS:</span>
+    </div>
+    <button class="btn-offer" onclick="activarOferta(13.00, '3x13')">PROMO 3x13</button>
+
+
+    <div class="category">🍞 Sección Kekes</div>
+    <div class="container">
+        <button class="btn-keke" onclick="agregarConTipo('Keke Platano', 2.50)">Platano S/2.5</button>
+        <button class="btn-keke" onclick="agregarConTipo('Keke Platano c/ chispas', 2.50)">Platano con chispas S/2.5</button>
+        <button class="btn-keke" onclick="agregarConTipo('Kekes 3x6', 6.00)">OFERTA 3x6</button>
+    </div>
+
+    <div class="category" style="border-left-color: #7f8c8d;">➕ Adicionales</div>
+    <div class="container">
+        <button class="btn-mesa" style="background:#95a5a6" onclick="agregarConTipo('Taper Adicional', 0.50)">Taper S/ 0.50</button>
+        <button class="btn-mesa" style="background:#d35400" onclick="agregarVentaLibre()">✨ OTRO PRECIO</button>
+    </div>
+
+    <div id="resumen-cuenta">
+        <div class="cart-header">🛒 PEDIDO ACTUAL</div>
+        <div id="lista-productos"></div>
+
+        <div class="resumen-footer">
+            <select id="metodoPago" style="width:100%; padding:10px; margin-bottom:15px; border-radius:8px;">
+                <option value="Efectivo">💵 Efectivo</option>
+                <option value="Yape/Plin">📱 Yape / Plin</option>
+                <option value="Transferencia">🏦 Transferencia</option>
+            </select>
+            <div id="total-cuenta">Total: S/ 0.00</div>
+            <button class="btn-cobrar" onclick="cobrarMesaCompleta()">🖨️ COBRAR TICKET</button>
+            <button class="btn-limpiar" onclick="limpiarMesa()">🗑️ LIMPIAR TODO</button>
+        </div>
+    </div>
+
+
+
+    <div style="margin: 40px 0; padding: 20px; background: #1e3a8a; border-radius: 12px; border: 2px solid #2563eb; text-align: center;">
+        <div style="font-size: 13px; color: #bfdbfe; margin-bottom: 10px; font-weight: bold; letter-spacing: 1px;">ADMINISTRACIÓN DEL SISTEMA</div>
+        <button class="btn-cierre" onclick="generarCierreCaja()" style="width: 100%; background: #3b82f6; color: white; border: none; padding: 18px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.3); transition: background 0.3s;">
+            📊 GENERAR REPORTE DE CIERRE
+        </button>
+    </div>
+
+    <div id="modal-cierre" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.9); z-index: 10000; justify-content: center; align-items: center; backdrop-filter: blur(4px);">
+        <div style="background: #1e293b; padding: 30px; border-radius: 15px; width: 90%; max-width: 400px; text-align: center; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); border: 1px solid #334155;">
+
+            <h2 style="margin-top: 0; color: #f8fafc; font-family: sans-serif;">Cierre de Caja</h2>
+
+            <div id="contenido-reporte" style="text-align: left; background: #0f172a; color: #38bdf8; padding: 20px; border-radius: 8px; font-family: 'Courier New', monospace; margin-bottom: 25px; border: 1px solid #1e3a8a; line-height: 1.6; font-size: 15px;">
+            </div>
+
+            <div style="display: flex; gap: 10px;">
+                <button onclick="document.getElementById('modal-cierre').style.display='none'" style="flex: 1; padding: 12px; background: #334155; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold;">CERRAR</button>
+                <button onclick="reiniciarDia()" style="padding: 12px; background: #991b1b; color: #fecaca; border: none; border-radius: 8px; cursor: pointer; font-size: 18px;" title="Borrar datos del día">🗑️</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="JavaScript.js"></script>
+</body>
+</html>
