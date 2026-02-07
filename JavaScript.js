@@ -233,7 +233,7 @@ async function enviarAPI(sabor, precio, cantidad, promocion) {
     try {
         const response = await fetch("http://127.0.0.1:7000/api/Tickets/imprimir", {
             method: 'POST',
-            mode: 'cors',
+            mode: 'no-cors',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(datos)
         });
