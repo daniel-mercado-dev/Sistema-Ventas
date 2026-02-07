@@ -218,9 +218,7 @@ function gestionarMaza(sabor) {
 
 // --- COMUNICACIÓN CON API ---
 
-// --- COMUNICACIÓN CON API ---
-
-async function enviarAPI(sabor, precio, cantidad, promocion) {
+aasync function enviarAPI(sabor, precio, cantidad, promocion) {
     const elMetodo = document.getElementById('metodoPago');
     const metodoElegido = elMetodo ? elMetodo.value : "Efectivo";
 
@@ -233,18 +231,19 @@ async function enviarAPI(sabor, precio, cantidad, promocion) {
     };
 
     try {
+        // USAMOS HTTP (sin S) y la IP 127.0.0.1
         const response = await fetch("http://127.0.0.1:7000/api/Tickets/imprimir", {
             method: 'POST',
-            mode: 'no-cors', 
+            mode: 'no-cors', // <--- ESTO ES VITAL
             headers: { 
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(datos)
         });
-        // Con 'no-cors' no podemos leer la respuesta, pero la orden se envía.
-        return true; 
+        return response.ok;
     } catch (error) {
         console.error("Error de conexión con la ticketera:", error);
+        // Si sale este error en la consola (F12), es porque el navegador aún bloquea la IP
         return false;
     }
 }
