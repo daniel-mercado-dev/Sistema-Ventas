@@ -218,7 +218,7 @@ function gestionarMaza(sabor) {
 
 // --- COMUNICACIÓN CON API ---
 
-aasync function enviarAPI(sabor, precio, cantidad, promocion) {
+async function enviarAPI(sabor, precio, cantidad, promocion) {
     const elMetodo = document.getElementById('metodoPago');
     const metodoElegido = elMetodo ? elMetodo.value : "Efectivo";
 
@@ -231,19 +231,14 @@ aasync function enviarAPI(sabor, precio, cantidad, promocion) {
     };
 
     try {
-        // USAMOS HTTP (sin S) y la IP 127.0.0.1
-        const response = await fetch("http://127.0.0.1:7000/api/Tickets/imprimir", {
+        const response = await fetch("https://localhost:7000/api/Tickets/imprimir", {
             method: 'POST',
-            mode: 'no-cors', // <--- ESTO ES VITAL
-            headers: { 
-                'Content-Type': 'application/json'
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(datos)
         });
         return response.ok;
     } catch (error) {
-        console.error("Error de conexión con la ticketera:", error);
-        // Si sale este error en la consola (F12), es porque el navegador aún bloquea la IP
+        console.error("Error de conexión con la API:", error);
         return false;
     }
 }
@@ -263,29 +258,29 @@ function mostrarNotificacion(mensaje, tipo = 'info') {
 }
 
 function agregarConTipo(nombreProducto, precio, idSelect = null) {
+    // 1. CAPTURAR EL DESTINO EN EL MOMENTO DEL CLIC
     const rbLlevar = document.getElementById('modoLlevar');
     const destino = (rbLlevar && rbLlevar.checked) ? "LLEVAR" : "MESA";
 
     let nombreFinal = "";
 
-    // Si enviamos un ID de selector (como 'saborMazamorra')
+    // 2. DETERMINAR EL NOMBRE DEL PRODUCTO
     if (idSelect) {
         const selector = document.getElementById(idSelect);
-        if (selector && selector.options[selector.selectedIndex]) {
-            nombreFinal = `[${destino}] ${selector.options[selector.selectedIndex].text}`;
-        } else {
-            // Si el selector falla, usamos el nombre por defecto
-            nombreFinal = `[${destino}] ${nombreProducto}`;
-        }
+        // Usamos .text para que salga el nombre completo de la opción
+        const saborSeleccionado = selector.options[selector.selectedIndex].text;
+        nombreFinal = `[${destino}] ${saborSeleccionado}`;
     } else {
         nombreFinal = `[${destino}] ${nombreProducto}`;
     }
 
+    // 3. AGREGAR A LA LISTA
     cuentaMesa.push({
         nombre: nombreFinal,
         precio: parseFloat(precio)
     });
 
+    // 4. REFRESCAR LA PANTALLA
     actualizarVistaMesa();
 }
 
