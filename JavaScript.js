@@ -218,6 +218,8 @@ function gestionarMaza(sabor) {
 
 // --- COMUNICACIÓN CON API ---
 
+// --- COMUNICACIÓN CON API ---
+
 async function enviarAPI(sabor, precio, cantidad, promocion) {
     const elMetodo = document.getElementById('metodoPago');
     const metodoElegido = elMetodo ? elMetodo.value : "Efectivo";
@@ -231,16 +233,18 @@ async function enviarAPI(sabor, precio, cantidad, promocion) {
     };
 
     try {
-        // CAMBIA ESTA LÍNEA ESPECÍFICAMENTE:
-        const response = await fetch("https://127.0.0.1:7000/api/Tickets/imprimir", {
+        const response = await fetch("http://127.0.0.1:7000/api/Tickets/imprimir", {
             method: 'POST',
-            mode: 'cors', // Agrega esto para evitar errores de permisos
-            headers: { 'Content-Type': 'application/json' },
+            mode: 'no-cors', 
+            headers: { 
+                'Content-Type': 'application/json'
+            },
             body: JSON.stringify(datos)
         });
-        return response.ok;
+        // Con 'no-cors' no podemos leer la respuesta, pero la orden se envía.
+        return true; 
     } catch (error) {
-        console.error("Error de conexión:", error);
+        console.error("Error de conexión con la ticketera:", error);
         return false;
     }
 }
