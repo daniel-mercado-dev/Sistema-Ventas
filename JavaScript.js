@@ -263,29 +263,29 @@ function mostrarNotificacion(mensaje, tipo = 'info') {
 }
 
 function agregarConTipo(nombreProducto, precio, idSelect = null) {
-    // 1. CAPTURAR EL DESTINO EN EL MOMENTO DEL CLIC
     const rbLlevar = document.getElementById('modoLlevar');
     const destino = (rbLlevar && rbLlevar.checked) ? "LLEVAR" : "MESA";
 
     let nombreFinal = "";
 
-    // 2. DETERMINAR EL NOMBRE DEL PRODUCTO
+    // Si enviamos un ID de selector (como 'saborMazamorra')
     if (idSelect) {
         const selector = document.getElementById(idSelect);
-        // Usamos .text para que salga el nombre completo de la opción
-        const saborSeleccionado = selector.options[selector.selectedIndex].text;
-        nombreFinal = `[${destino}] ${saborSeleccionado}`;
+        if (selector && selector.options[selector.selectedIndex]) {
+            nombreFinal = `[${destino}] ${selector.options[selector.selectedIndex].text}`;
+        } else {
+            // Si el selector falla, usamos el nombre por defecto
+            nombreFinal = `[${destino}] ${nombreProducto}`;
+        }
     } else {
         nombreFinal = `[${destino}] ${nombreProducto}`;
     }
 
-    // 3. AGREGAR A LA LISTA
     cuentaMesa.push({
         nombre: nombreFinal,
         precio: parseFloat(precio)
     });
 
-    // 4. REFRESCAR LA PANTALLA
     actualizarVistaMesa();
 }
 
