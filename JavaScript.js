@@ -237,10 +237,10 @@ async function enviarAPI(sabor, precio, cantidad, promocion) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(datos)
         });
-        return response.ok;
+        return {success: true };
     } catch (error) {
         console.error("Error de conexión con la API:", error);
-        return false;
+        return { success: false };
     }
 }
 
