@@ -129,11 +129,11 @@ async function cobrarMesaCompleta() {
         // -----------------------------------
 
         // 3. COMENTAMOS TODO EL ENVÍO A LA API E IMPRESIÓN
-        /* const resultado = await enviarAPI(detalleResumen, total, 1, "Venta");
+         const resultado = await enviarAPI(detalleResumen, total, 1, "Venta");
         if (resultado && resultado.success) {
              console.log("Impresión exitosa");
         }
-        */
+        
 
         // 4. LIMPIEZA DE MESA (Esto DEBE quedar afuera para que la mesa se limpie)
         cuentaMesa = [];
