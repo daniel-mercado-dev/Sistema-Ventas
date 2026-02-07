@@ -234,7 +234,7 @@ aasync function enviarAPI(sabor, precio, cantidad, promocion) {
         // USAMOS HTTP (sin S) y la IP 127.0.0.1
         const response = await fetch("http://127.0.0.1:7000/api/Tickets/imprimir", {
             method: 'POST',
-            mode: 'cors', // <--- ESTO ES VITAL
+            mode: 'no-cors', // <--- ESTO ES VITAL
             headers: { 
                 'Content-Type': 'application/json'
             },
