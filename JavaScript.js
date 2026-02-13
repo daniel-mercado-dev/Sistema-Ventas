@@ -73,50 +73,63 @@ function cancelarOferta() {
 function actualizarVistaMesa() {
     const contenedor = document.getElementById('lista-productos');
     const totalTxt = document.getElementById('total-cuenta');
-    contenedor.innerHTML = "";
 
+    if (!contenedor || !totalTxt) return;
+
+    contenedor.innerHTML = "";
     let total = 0;
+
     cuentaMesa.forEach((item, index) => {
         total += item.precio;
 
-        const esOferta = /3x6|3x7|3x12|PROMO/i.test(item.nombre);
+        // 1. DETERMINAR SI ES OFERTA
+        const esOferta = /3x6|3x7|3x12|3x13|PROMO/i.test(item.nombre);
 
-        // Limpiamos el nombre de cualquier precio que se haya guardado en el string
-        let nombreSinPrecio = item.nombre.replace(/S\/\s?\d+(\.\d+)?/g, "").trim();
+        // 2. DECLARAR LA VARIABLE DE PRECIO PARA LA PANTALLA
+        const precioEtiqueta = esOferta ? `(Pack)` : `S/ ${item.precio.toFixed(2)}`;
 
-        const precioAMostrar = esOferta ? "" : `S/ ${item.precio.toFixed(2)}`;
+        // 3. LIMPIAR NOMBRE PARA LA PANTALLA
+        let nombreLimpio = item.nombre.replace(/S\/\s?\d+(\.\d+)?/g, "").trim();
+        const nombreFormateado = nombreLimpio.includes(" + ")
+            ? nombreLimpio.replace(/\s\+\s/g, '<br>• ')
+            : nombreLimpio;
 
-        const nombreFormateado = nombreSinPrecio.includes(" + ")
-            ? nombreSinPrecio.replace(/\s\+\s/g, '<br>• ')
-            : nombreSinPrecio;
-
+        // 4. DIBUJAR EN EL HTML
         contenedor.innerHTML += `
-            <div class="item-fila" style="display: flex; justify-content: space-between; align-items: flex-start; padding: 10px; border-bottom: 1px solid #eee;">
-                <div class="item-info" style="text-align: left; flex: 1; font-size: 14px; line-height: 1.4;">
-                    ${nombreFormateado}
-                </div>
-                <div class="item-precio" style="min-width: 80px; text-align: right; font-weight: bold; color: #27ae60;">
-                    ${precioAMostrar} 
-                </div>
-                <button class="btn-eliminar" onclick="eliminarProducto(${index})" style="margin-left: 10px; background: #e74c3c; color: white; border: none; padding: 5px; border-radius: 4px; cursor: pointer;">
-                    🗑️
-                </button>
+        <div class="item-fila" style="border-left: 4px solid ${esOferta ? '#3b82f6' : '#10b981'}; background: #1e293b; margin-bottom: 8px; padding: 12px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+            <div class="item-info" style="flex: 1;">
+                <span style="color: #ffffff; font-weight: 800; font-size: 13px; display: block;">${nombreFormateado}</span>
+                <small style="color: #64748b; font-size: 10px;">${esOferta ? '🔖 PROMO' : '🍨 SIMPLE'}</small>
             </div>
-        `;
+            <div style="text-align: right; margin-right: 10px;">
+                <span style="color: ${esOferta ? '#94a3b8' : '#10b981'}; font-weight: 900;">${precioEtiqueta}</span>
+            </div>
+            <button class="btn-eliminar" onclick="eliminarProducto(${index})" style="background: none; border: none; cursor: pointer; font-size: 16px;">🗑️</button>
+        </div>`;
     });
-    totalTxt.innerText = `Total: S/ ${total.toFixed(2)}`;
-}   
 
+    // --- LO QUE DEBES AGREGAR PARA LA API/TICKET ---
+
+    // 5. Guardamos el texto formateado que irá a la impresora
+    window.detalleTicketActual = cuentaMesa.map(item => {
+        const esOferta = /3x6|3x7|3x12|3x13|PROMO/i.test(item.nombre);
+        return esOferta
+            ? item.nombre.toUpperCase()
+            : `${item.nombre.toUpperCase()} (S/ ${item.precio.toFixed(2)})`;
+    }).join(" + ");
+
+    // 6. Actualizamos el total numérico
+    totalTxt.innerText = `Total: S/ ${total.toFixed(2)}`;
+}
 async function cobrarMesaCompleta() {
     if (cuentaMesa.length === 0) return alert("La mesa está vacía");
     let total = cuentaMesa.reduce((sum, item) => sum + item.precio, 0);
     let metodoElegido = document.getElementById('metodoPago').value;
 
-    // 1. GENERAMOS EL TEXTO PARA EL MENSAJE DE CONFIRMACIÓN (Pero no para la impresora)
-    let detalleResumen = cuentaMesa.map(i => `${i.nombre}`).join("\n");
+    // 1. Este detalle es SOLO para el mensaje de confirmación del navegador
+    let detalleParaConfirmar = cuentaMesa.map(i => `${i.nombre}`).join("\n");
 
-    // 2. CONFIRMACIÓN EN PANTALLA
-    if (confirm(`¿COBRAR?\n\n${detalleResumen}\n\nTOTAL: S/ ${total.toFixed(2)}`)) {
+    if (confirm(`¿COBRAR?\n\n${detalleParaConfirmar}\n\nTOTAL: S/ ${total.toFixed(2)}`)) {
 
         // --- GUARDAR PARA CIERRE DE CAJA ---
         const nuevaVenta = {
@@ -126,22 +139,60 @@ async function cobrarMesaCompleta() {
         };
         ventasDelDia.push(nuevaVenta);
         localStorage.setItem('ventasDelDia', JSON.stringify(ventasDelDia));
-        // -----------------------------------
 
-        // 3. COMENTAMOS TODO EL ENVÍO A LA API E IMPRESIÓN
-         const resultado = await enviarAPI(detalleResumen, total, 1, "Venta");
-        if (resultado && resultado.success) {
-             console.log("Impresión exitosa");
+        // 2. ENVIAR A LA API 
+        // USAMOS 'window.detalleTicketActual' porque ese YA TIENE LOS PRECIOS (calculados en actualizarVistaMesa)
+        const resultado = await enviarAPI(window.detalleTicketActual, total, 1, "Venta"); // <--- CAMBIO AQUÍ
+
+        if (resultado) {
+             console.log("Impresión enviada con éxito");
         }
-        
 
-        // 4. LIMPIEZA DE MESA (Esto DEBE quedar afuera para que la mesa se limpie)
+        // 3. LIMPIEZA DE MESA
         cuentaMesa = [];
         actualizarVistaMesa();
-        alert(`✅ Venta guardada en Reporte Azul (S/ ${total.toFixed(2)})`);
+        alert(`✅ Venta guardada e impresa (S/ ${total.toFixed(2)})`);
     }
 }
 
+// Modificamos también enviarAPI para asegurar que tome los datos correctos
+async function enviarAPI(sabor, precio, cantidad, promocion) {
+    const elMetodo = document.getElementById('metodoPago');
+    const metodoElegido = elMetodo ? elMetodo.value : "Efectivo";
+
+    // --- VALIDACIÓN DE SEGURIDAD ---
+    // Si 'sabor' llega vacío, la API C# lanzará error 400
+    const saborFinal = sabor || "Producto sin nombre";
+
+    const datos = {
+        Sabor: String(saborFinal),
+        Precio: parseFloat(precio) || 0,
+        Cantidad: parseInt(cantidad) || 1,
+        Promocion: String(promocion) || "Venta",
+        MetodoPago: metodoElegido
+    };
+
+    console.log("Enviando estos datos a la API:", datos); // Revisa esto en la consola (F12)
+
+    try {
+        const response = await fetch("https://localhost:7000/api/Tickets/imprimir", {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(datos)
+        });
+
+        if (!response.ok) {
+            // Si hay error 400, esto te dirá qué dijo el servidor
+            const errorDetalle = await response.text();
+            console.error("Error del servidor C#:", errorDetalle);
+        }
+
+        return response.ok;
+    } catch (error) {
+        console.error("Error de conexión (¿Está abierta la API?):", error);
+        return false;
+    }
+}
 async function vender() {
     const elSabor = document.getElementById('saborMazamorra');
     const elPrecio = document.getElementById('precioMazamorra');
@@ -218,31 +269,7 @@ function gestionarMaza(sabor) {
 
 // --- COMUNICACIÓN CON API ---
 
-async function enviarAPI(sabor, precio, cantidad, promocion) {
-    const elMetodo = document.getElementById('metodoPago');
-    const metodoElegido = elMetodo ? elMetodo.value : "Efectivo";
 
-    const datos = {
-        Sabor: sabor,
-        Precio: parseFloat(precio),
-        Cantidad: parseInt(cantidad),
-        Promocion: promocion || "",
-        MetodoPago: metodoElegido
-    };
-
-    try {
-        const response = await fetch("http://127.0.0.1:7000", {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(datos)
-        });
-        return {success: true };
-    } catch (error) {
-        console.error("Error de conexión con la API:", error);
-        return { success: false };
-    }
-}
 
 function mostrarNotificacion(mensaje, tipo = 'info') {
     // Si no tienes el CSS de toast, esto al menos saldrá en consola
