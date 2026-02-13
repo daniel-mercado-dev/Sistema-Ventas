@@ -39,12 +39,15 @@
             <option value="Calabaza">Calabaza</option>
             <option value="Durazno">Durazno</option>
             <option value="Piña c/ Membrillo">Piña c/ Membrillo</option>
+            <option value="Zambito c/ Morada">Zambito c/ Morada </option>
             <option value="Maicena">Maicena</option>
             <option value="Otro">Otro</option>
         </select>
         <button class="btn-mesa" onclick="agregarConTipo(null, 2.50, 'saborMesa')">S/ 2.50</button>
         <button class="btn-mesa" onclick="agregarConTipo(null, 3.00, 'saborMesa')">S/ 3.00</button>
+        <button class="btn-mesa" onclick="agregarConTipo(null, 4.00, 'saborMesa')">S/ 4.00</button>
         <button class="btn-mesa" onclick="agregarConTipo(null, 5.00, 'saborMesa')">S/ 5.00</button>
+        <button class="btn-mesa" onclick="agregarConTipo(null, 6.00, 'saborMesa')">S/ 6.00</button>
         <button class="btn-mesa" onclick="agregarConTipo(null, 9.00, 'saborMesa')">S/ 9.00</button>
     </div>
 
@@ -55,6 +58,7 @@
         <button class="btn-maza" onclick="gestionarMaza('Maicena')">Maicena</button>
         <button class="btn-maza" onclick="gestionarMaza('Clasico')">Clasico</button>
         <button class="btn-maza" onclick="gestionarMaza('Zambito')">Zambito</button>
+        <button class="btn-maza" onclick="gestionarMaza('Zambito con Morada')">Zambito con Morada</button>
         <button class="btn-maza" onclick="gestionarMaza('Calabaza')">Calabaza</button>
         <button class="btn-maza" onclick="gestionarMaza('Durazno')">Durazno</button>
         <button class="btn-maza" onclick="gestionarMaza('Piña')">Piña/Memb.</button>
@@ -80,7 +84,7 @@
         <button class="btn-pastel" onclick="gestionarPastel('Empanada', 3.00)">Empanada S/3</button>
         <button class="btn-offer" onclick="gestionarPastel('Empanada 3x8', 8.00)">Empanada 3x8 S/8</button>
         <button class="btn-pastel" onclick="gestionarPastel('Pionono', 3.00)">Pionono S/3</button>
-        <button class="btn-offer" onclick="gestionarPastel('Pionono', 8.00)">Pionono 3x8 S/3</button>
+        <button class="btn-offer" onclick="gestionarPastel('Pionono 3x8', 8.00)">Pionono 3x8 S/3</button>
         <button class="btn-pastel" onclick="gestionarPastel('Crema Volt.', 5.00)">Crema Volt. S/5</button>
         <button class="btn-offer" onclick="gestionarPastel('Crema Volt.3x13', 13.00)">Crema Volt. 3x13 S/13</button>
         <button class="btn-pastel" onclick="gestionarPastel('Torta Helada', 5.00)">Torta Hel. S/5</button>
@@ -88,12 +92,13 @@
         <button class="btn-pastel" onclick="gestionarPastel('Torta Moka ', 5.00)">Torta Moka S/5</button>
         <button class="btn-pastel" onclick="gestionarPastel('Torta Chocolate ', 5.00)">Torta  Chocolate S/5</button>
         <button class="btn-pastel" onclick="gestionarPastel('Tres Leches', 5.00)">3 Leches S/5</button>
-        <button class="btn-pastel" onclick="gestionarPastel('Pye Limon', 6.00)">Pye Limon S/6</button>
         <button class="btn-pastel" onclick="gestionarPastel('Tartaleta Fresa ', 5.00)">Tartaleta Fresa S/5</button>
-        <button class="btn-pastel" onclick="gestionarPastel('Explosion de Fresa ', 6.00)">Explosion de Fresa S/6</button>
+        <button class="btn-pastel" onclick="gestionarPastel('Tartaleta de Frutas ', 5.00)">Tartaleta de Frutas S/5</button>
         <button class="btn-pastel" onclick="gestionarPastel('Tartaleta Maracuya', 5.00)">Tartaleta Maracuya S/5</button>
         <button class="btn-pastel" onclick="gestionarPastel('Pye de manzana', 5.00)">Pye Manzana S/5</button>
         <button class="btn-pastel" onclick="gestionarPastel('Caprichos', 5.00)">Caprichos S/5</button>
+        <button class="btn-pastel" onclick="gestionarPastel('Explosion de Fresa ', 6.00)">Explosion de Fresa S/6</button>
+        <button class="btn-pastel" onclick="gestionarPastel('Pye Limon', 6.00)">Pye Limon S/6</button>
 
     </div>
 
@@ -105,10 +110,26 @@
 
     <div class="category">🍞 Sección Kekes</div>
     <div class="container">
-        <button class="btn-keke" onclick="agregarConTipo('Keke Platano', 2.50)">Platano S/2.5</button>
-        <button class="btn-keke" onclick="agregarConTipo('Keke Platano c/ chispas', 2.50)">Platano con chispas S/2.5</button>
-        <button class="btn-keke" onclick="agregarConTipo('Kekes 3x6', 6.00)">OFERTA 3x6</button>
+        <button class="btn-keke" onclick="agregarConTipo('Keke Vainilla', 2.50)">Keke de Vainilla S/2.5</button>
+        <button class="btn-keke" onclick="agregarConTipo('Kekes 3x6', 6.00)">Kekes Oferta 3x6</button>
     </div>
+
+    <div class="category">🍞 Gaseosas</div>
+    <div class="container">
+        <button class="btn-keke" onclick="agregarConTipo('Gaseosa Personal', 3.00)">Gaseosa Personal S/3.0</button>
+        <button class="btn-keke" onclick="agregarConTipo('Gaseosa Descartable', 4.00)">Gaseosa Descartable S/4.0</button>
+        <button class="btn-keke" onclick="agregarConTipo('Gaseosa LItro', 6.50)">Gaseosa Litro S/6.50</button>
+        <button class="btn-keke" onclick="agregarConTipo('Gaseosa Gordita', 4.50)">Gaseosa Gordita S/4.50</button>
+        <button class="btn-keke" onclick="agregarConTipo('Gaseosa Fanta', 3.00)">Gaseosa Fanta S/3.00</button>
+        <button class="btn-keke" onclick="agregarConTipo('Agua San Mateo', 2.50)">Agua San Mateo S/2.50</button>
+        <button class="btn-keke" onclick="agregarConTipo('Agua Cielo', 2.00)">Agua Cielo S/2.0</button>
+        <button class="btn-keke" onclick="agregarConTipo('Chicha', 1.50)">Chicha S/1.5</button>
+        <button class="btn-keke" onclick="agregarConTipo('Gelatina', 1.50)">Gelatina S/1.5</button>
+
+
+        
+    </div>
+
 
     <div class="category" style="border-left-color: #7f8c8d;">➕ Adicionales</div>
     <div class="container">
