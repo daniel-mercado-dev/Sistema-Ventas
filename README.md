@@ -34,3 +34,16 @@ El proyecto está construido bajo una arquitectura limpia y modular en capas, se
 1. Clonar el repositorio:
    ```bash
    git clone [https://github.com/daniel-mercado-dev/Sistema-Ventas.git](https://github.com/daniel-mercado-dev/Sistema-Ventas.git)
+
+   Configurar la cadena de conexión en el archivo appsettings.json.
+
+Aplicar las migraciones para estructurar la base de datos de manera automática:
+
+Bash
+dotnet ef database update
+Compilar y ejecutar la aplicación desde Visual Studio o mediante la CLI:
+
+Bash
+dotnet run
+Abrir en el navegador la dirección local generada (ej. http://localhost:5000).
+
