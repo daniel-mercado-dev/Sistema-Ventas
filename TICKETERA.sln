@@ -5,19 +5,50 @@ VisualStudioVersion = 17.14.36804.6
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TICKETERA", "TICKETERA\TICKETERA.csproj", "{87F62261-A7E4-499D-BEEB-4D1CDFAB4356}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{827E0CD3-B72D-47B6-A68D-7590B98EB39B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PosAstrid.Domain", "src\PosAstrid.Domain\PosAstrid.Domain.csproj", "{0C3B1D37-4173-4128-A6C7-DB0698E1F19B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
 		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{87F62261-A7E4-499D-BEEB-4D1CDFAB4356}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{87F62261-A7E4-499D-BEEB-4D1CDFAB4356}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87F62261-A7E4-499D-BEEB-4D1CDFAB4356}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{87F62261-A7E4-499D-BEEB-4D1CDFAB4356}.Debug|x64.Build.0 = Debug|Any CPU
+		{87F62261-A7E4-499D-BEEB-4D1CDFAB4356}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{87F62261-A7E4-499D-BEEB-4D1CDFAB4356}.Debug|x86.Build.0 = Debug|Any CPU
 		{87F62261-A7E4-499D-BEEB-4D1CDFAB4356}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{87F62261-A7E4-499D-BEEB-4D1CDFAB4356}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87F62261-A7E4-499D-BEEB-4D1CDFAB4356}.Release|x64.ActiveCfg = Release|Any CPU
+		{87F62261-A7E4-499D-BEEB-4D1CDFAB4356}.Release|x64.Build.0 = Release|Any CPU
+		{87F62261-A7E4-499D-BEEB-4D1CDFAB4356}.Release|x86.ActiveCfg = Release|Any CPU
+		{87F62261-A7E4-499D-BEEB-4D1CDFAB4356}.Release|x86.Build.0 = Release|Any CPU
+		{0C3B1D37-4173-4128-A6C7-DB0698E1F19B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C3B1D37-4173-4128-A6C7-DB0698E1F19B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C3B1D37-4173-4128-A6C7-DB0698E1F19B}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{0C3B1D37-4173-4128-A6C7-DB0698E1F19B}.Debug|x64.Build.0 = Debug|Any CPU
+		{0C3B1D37-4173-4128-A6C7-DB0698E1F19B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{0C3B1D37-4173-4128-A6C7-DB0698E1F19B}.Debug|x86.Build.0 = Debug|Any CPU
+		{0C3B1D37-4173-4128-A6C7-DB0698E1F19B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C3B1D37-4173-4128-A6C7-DB0698E1F19B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C3B1D37-4173-4128-A6C7-DB0698E1F19B}.Release|x64.ActiveCfg = Release|Any CPU
+		{0C3B1D37-4173-4128-A6C7-DB0698E1F19B}.Release|x64.Build.0 = Release|Any CPU
+		{0C3B1D37-4173-4128-A6C7-DB0698E1F19B}.Release|x86.ActiveCfg = Release|Any CPU
+		{0C3B1D37-4173-4128-A6C7-DB0698E1F19B}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{0C3B1D37-4173-4128-A6C7-DB0698E1F19B} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {46BD6F64-8FA9-424A-B4BA-BB04FC5D5B69}
