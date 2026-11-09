@@ -5,6 +5,7 @@ public class Venta
     public Guid Id { get; private set; } = Guid.NewGuid();
     public DateTime Fecha { get; private set; } = DateTime.UtcNow;
     public string MetodoPago { get; private set; } = string.Empty;
+
     public decimal MontoTotal { get; private set; }
     
     private readonly List<VentaDetalle> _detalles = new();

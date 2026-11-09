@@ -36,7 +36,7 @@ namespace TICKETERA.Services
             [MarshalAs(UnmanagedType.LPTStr)] public string pDataType;
         }
 
-        private const string PrinterName = "MP-POS80";
+        private const string PrinterName = "MP-POS80 2";
 
         private static string L(string texto)
         {
