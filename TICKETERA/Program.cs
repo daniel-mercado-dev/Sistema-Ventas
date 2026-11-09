@@ -4,9 +4,8 @@ using TICKETERA.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -37,7 +36,7 @@ if (app.Environment.IsDevelopment())
 
 
 app.UseAuthorization();
-app.UseDefaultFiles(); // Para que busque el index.html automáticamente
+app.UseDefaultFiles(); // Para que busque el index.html automï¿½ticamente
 app.UseStaticFiles();  // Para que permita ver archivos en wwwroot
 app.UseCors();
 app.UseHttpsRedirection();
