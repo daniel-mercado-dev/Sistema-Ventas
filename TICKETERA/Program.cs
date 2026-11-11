@@ -25,6 +25,9 @@ builder.Services.AddCors(options => {
 // Registro del servicio UNA sola vez , fuera del bloque CORS
 builder.Services.AddScoped<TicketPrintingService>();
 
+var port = Environment.GetEnvironmentVariable("PORT") ?? "10000";
+builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
