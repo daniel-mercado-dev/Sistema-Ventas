@@ -39,7 +39,7 @@ namespace TICKETERA.Controllers
                     else
                     {
                         // MODO MAÑANA: Creamos el registro con el stock inicial
-                        item.Fecha = DateTime.Now;
+                        item.Fecha = DateTime.UtcNow;
                         // El StockFinal inicia igual al Inicial para que "Vendido" sea 0 al empezar
                         if (item.StockFinal == 0) item.StockFinal = item.StockInicial;
 

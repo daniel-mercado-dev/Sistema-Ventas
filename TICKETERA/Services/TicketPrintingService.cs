@@ -101,7 +101,7 @@ namespace TICKETERA.Services
                         e.PrintLine("--------------------------------"),
                         e.SetStyles(PrintStyle.Bold),
                         e.PrintLine(L($"ORDEN: #{venta.Id}")),
-                        e.PrintLine(L($"FECHA: {DateTime.Now:dd/MM/yyyy HH:mm:ss}")),
+                        e.PrintLine(L($"FECHA: {DateTime.UtcNow:dd/MM/yyyy HH:mm:ss}")),
                         e.SetStyles(PrintStyle.None),
                         e.PrintLine("--------------------------------"),
                         e.PrintLine(L("ITEM                       TOTAL")),

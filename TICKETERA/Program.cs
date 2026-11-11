@@ -28,11 +28,12 @@ builder.Services.AddScoped<TicketPrintingService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+app.UseSwagger();
+app.UseSwaggerUI(c =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "TICKETERA API v1");
+    c.RoutePrefix = string.Empty; // Opcional: hace que Swagger abra directamente en la raíz de la URL
+});
 
 
 app.UseAuthorization();
