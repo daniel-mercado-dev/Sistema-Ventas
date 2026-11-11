@@ -30,7 +30,7 @@ namespace TICKETERA.Controllers
             {
                 var nuevaVenta = new VentaCabecera
                 {
-                    Fecha = DateTime.Now,
+                    Fecha = DateTime.UtcNow,
                     MetodoPago = venta.MetodoPago,
                     MontoTotal = venta.Items.Sum(i => i.Precio * i.Cantidad),
                     Detalles = venta.Items.Select(i => new VentaDetalle
