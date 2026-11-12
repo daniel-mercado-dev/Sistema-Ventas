@@ -142,37 +142,31 @@ async function cobrarMesaCompleta() {
         // Convertimos cuentaMesa al formato que espera el backend
         const resultado = await enviarAPI(cuentaMesa, metodoElegido);
 
-        if (resultado) {
-            console.log("Impresión enviada con éxito");
+         if (!resultado) {
+            alert("❌ No se pudo guardar la venta en el servidor. Revisa tu conexión e intenta de nuevo.");
+            // Quitamos la venta local que acabamos de agregar, para no duplicar el cierre de caja
+            ventasDelDia.pop();
+            localStorage.setItem('ventasDelDia', JSON.stringify(ventasDelDia));
+            return;   // no vaciamos la mesa, el cajero puede reintentar
         }
 
         cuentaMesa = [];
         actualizarVistaMesa();
-        alert(`✅ Venta guardada e impresa (S/ ${total.toFixed(2)})`);
+        alert(`✅ Venta guardada (S/ ${total.toFixed(2)})`);
     }
 }
 
 async function enviarAPI(itemsMesa, metodoPago) {
-    // Transformamos cuentaMesa al formato que espera el backend
     const datos = {
         MetodoPago: String(metodoPago),
         Items: itemsMesa.map(item => ({
             Producto: item.nombre,
-            Cantidad: 1,              // cada entrada en cuentaMesa ya es 1 ítem
+            Cantidad: 1,
             Precio: parseFloat(item.precio)
         }))
     };
 
-    console.log("Enviando estos datos a la API:", datos);
-
     try {
-        //*const response = await fetch("https://localhost:7000/api/Tickets/imprimir", {
-          // method: 'POST',
-            //headers: { 'Content-Type': 'application/json' },
-           // body: JSON.stringify(datos)
-        //});
-
-        // Reemplaza "192.168.1.X" por la IP real de tu laptop
         const response = await fetch("/api/Tickets/imprimir", {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -180,16 +174,42 @@ async function enviarAPI(itemsMesa, metodoPago) {
         });
 
         if (!response.ok) {
-            const errorDetalle = await response.text();
-            console.error("Error del servidor C#:", errorDetalle);
+            console.error("Error del servidor:", await response.text());
+            return false;
         }
 
-        return response.ok;
+        const resultado = await response.json();   // trae { success, turno, mensaje }
+        imprimirTicketRawBT(itemsMesa, metodoPago, resultado.turno);
+        return true;
     } catch (error) {
         console.error("Error de conexión:", error);
         return false;
     }
 }
+
+function imprimirTicketRawBT(items, metodoPago, turno) {
+    let total = 0;
+    let texto = "      Dulces Limeños Astrid\n";         
+    texto += `Turno: ${turno}\n`;
+    texto += new Date().toLocaleString("es-PE") + "\n";
+    texto += "--------------------------------\n";
+
+    items.forEach(i => {
+        const nombre = i.nombre.replace(/S\/\s?\d+(\.\d+)?/g, "").trim();
+        texto += `${nombre}\n`;
+        texto += `                  S/ ${parseFloat(i.precio).toFixed(2)}\n`;
+        total += parseFloat(i.precio);
+    });
+
+    texto += "--------------------------------\n";
+    texto += `TOTAL: S/ ${total.toFixed(2)}\n`;
+    texto += `Pago: ${metodoPago}\n\n\n`;
+
+   
+    const base64 = btoa(unescape(encodeURIComponent(texto)));
+    window.location.href = "rawbt://base64," + base64;
+}
+
 async function vender() {
     const elSabor = document.getElementById('saborMazamorra');
     const elPrecio = document.getElementById('precioMazamorra');
@@ -200,7 +220,7 @@ async function vender() {
     const precio = elPrecio.value;
 
     if (confirm(`¿Procesar pedido de ${sabor} por S/ ${precio}?`)) {
-        await enviarAPI(sabor, precio, 1, "Atención en Mesa");
+       await enviarAPI([{ nombre: sabor, precio: precio }], "Efectivo");
     
     }
 }
