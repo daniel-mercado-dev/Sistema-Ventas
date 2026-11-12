@@ -187,7 +187,7 @@ async function enviarAPI(itemsMesa, metodoPago) {
     }
 }
 
-function imprimirTicketRawBT(items, metodoPago, turno) {
+/*function imprimirTicketRawBT(items, metodoPago, turno) {
     let total = 0;
     let texto = "      Dulces Limeños Astrid\n";         
     texto += `Turno: ${turno}\n`;
@@ -206,6 +206,74 @@ function imprimirTicketRawBT(items, metodoPago, turno) {
     texto += `Pago: ${metodoPago}\n\n\n`;
 
    
+    const base64 = btoa(unescape(encodeURIComponent(texto)));
+    window.location.href = "rawbt:base64," + base64;
+}*/
+
+function imprimirTicketRawBT(items, metodoPago, turno, nroOrden = "") {
+    let total = 0;
+    
+    // Encabezado corporativo idéntico al backend
+    let texto = "          TICKET DE VENTA\n";
+    texto += "      DULCES LIMENOS ASTRID\n";
+    texto += "       RUC: 10775714323\n";
+    texto += "   Mercado Suarez Betto Daniel\n";
+    texto += "        Av. Lima Sur 211\n";
+    texto += "        Tel: 958 324 196\n";
+    texto += "--------------------------------\n";
+    
+    if (nroOrden) {
+        texto += `ORDEN: #${nroOrden}\n`;
+    }
+    texto += `TURNO: ${turno}\n`;
+    texto += `FECHA: ${new Date().toLocaleString("es-PE")}\n`;
+    texto += "--------------------------------\n";
+    texto += "ITEM                      TOTAL\n";
+    texto += "--------------------------------\n";
+
+    // Detalle de productos
+    items.forEach(i => {
+        let nombre = i.nombre.replace(/S\/\s?\d+(\.\d+)?/g, "").trim().toUpperCase();
+        let precioNum = parseFloat(i.precio || 0);
+        total += precioNum;
+
+        let precioStr = `S/ ${precioNum.toFixed(2)}`;
+        
+        // Formato para alinear el nombre a la izquierda y el precio a la derecha (32 caracteres de ancho estándar)
+        if (nombre.length > 20) {
+            texto += `${nombre}\n`;
+            texto += `                         ${precioStr}\n`;
+        } else {
+            let espacios = " ".repeat(Math.max(1, 24 - nombre.length));
+            texto += `${nombre}${espacios}${precioStr}\n`;
+        }
+    });
+
+    // Totales y medios de pago
+    texto += "--------------------------------\n";
+    texto += `TOTAL A PAGAR: S/ ${total.toFixed(2)}\n`;
+    texto += `PAGO CON: ${metodoPago.toUpperCase()}\n`;
+    texto += "--------------------------------\n";
+    
+    // Promociones automáticas según el monto
+    if (total >= 25) {
+        texto += "!Llevas 1 mazamorra GRATIS!\n";
+    } else if (total >= 15) {
+        texto += "!Llevas 1 gelatina GRATIS!\n";
+    } else {
+        let falta = 15 - total;
+        texto += `Gasta S/ ${falta.toFixed(2)} mas y lleva\n`;
+        texto += "1 gelatina GRATIS\n";
+    }
+
+    texto += "--------------------------------\n";
+    texto += "Siguenos en Redes Sociales:\n";
+    texto += "Facebook: Dulces Limenos Astrid\n";
+    texto += "WhatsApp: 958 324 196\n\n";
+    texto += "     ¡GRACIAS POR SU COMPRA!\n";
+    texto += "     Conserve su comprobante\n\n\n";
+
+    // Codificación y envío a la app RawBT en Android
     const base64 = btoa(unescape(encodeURIComponent(texto)));
     window.location.href = "rawbt:base64," + base64;
 }
