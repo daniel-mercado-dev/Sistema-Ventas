@@ -21,10 +21,14 @@ namespace TICKETERA.Controllers
         {
             try
             {
-                var hoy = DateTime.Today;
+              var lima = TimeZoneInfo.FindSystemTimeZoneById("America/Lima");
+            var hoyLima = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, lima).Date;
+            var hoy = DateTime.SpecifyKind(hoyLima, DateTimeKind.Utc);
+
 
                 foreach (var item in items)
                 {
+                    item.Fecha = hoy;
                     // Buscamos si el producto ya se registró hoy
                     var registroExistente = await _context.InventarioDiario
                         .FirstOrDefaultAsync(x => x.Producto == item.Producto && x.Fecha.Date == hoy);
