@@ -207,7 +207,7 @@ function imprimirTicketRawBT(items, metodoPago, turno) {
 
    
     const base64 = btoa(unescape(encodeURIComponent(texto)));
-    window.location.href = "rawbt://base64," + base64;
+    window.location.href = "rawbt:base64," + base64;
 }
 
 async function vender() {
@@ -530,7 +530,7 @@ function imprimirTicketDesdeWeb() {
     // 2. Codificación Base64
     let base64Ticket = btoa(textoTicket);
     // 3. Este es el comando mágico que Android reconoce
-    let url = "rawbt://base64," + base64Ticket;
+    let url = "rawbt:base64," + base64Ticket;
     // 4. Intentar abrir
     window.location.href = url;
 }
