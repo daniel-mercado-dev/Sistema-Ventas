@@ -17,47 +17,51 @@ namespace TICKETERA.Controllers
         }
 
         [HttpPost("registrar")]
-        public async Task<IActionResult> RegistrarInventario([FromBody] List<Inventario> items)
+public async Task<IActionResult> RegistrarInventario([FromBody] List<Inventario> items)
+{
+    try
+    {
+        var lima = TimeZoneInfo.FindSystemTimeZoneById("America/Lima");
+        var hoyLima = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, lima).Date;
+        var hoy = DateTime.SpecifyKind(hoyLima, DateTimeKind.Utc);
+
+        foreach (var item in items)
         {
-            try
+            // Verificar que el producto exista
+            var existeProducto = await _context.Set<Producto>().AnyAsync(p => p.Id == item.ProductoId);
+            if (!existeProducto)
+                return BadRequest(new { success = false, mensaje = $"El producto {item.ProductoId} no existe." });
+
+            item.Producto = null!;   // evita que EF intente insertar el producto
+            item.Fecha = hoy;
+
+            var registroExistente = await _context.InventarioDiario
+                .FirstOrDefaultAsync(x => x.ProductoId == item.ProductoId && x.Fecha == hoy);
+
+            if (registroExistente != null)
             {
-              var lima = TimeZoneInfo.FindSystemTimeZoneById("America/Lima");
-            var hoyLima = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, lima).Date;
-            var hoy = DateTime.SpecifyKind(hoyLima, DateTimeKind.Utc);
-
-
-                foreach (var item in items)
-                {
-                    item.Fecha = hoy;
-                    // Buscamos si el producto ya se registró hoy
-                    var registroExistente = await _context.InventarioDiario
-                        .FirstOrDefaultAsync(x => x.Producto == item.Producto && x.Fecha.Date == hoy);
-
-                    if (registroExistente != null)
-                    {
-                        // MODO TARDE: Actualizamos solo el stock que quedó
-                        registroExistente.StockFinal = item.StockFinal;
-                        // Opcional: Actualizar precio por si cambió
-                        registroExistente.PrecioUnitario = item.PrecioUnitario;
-                    }
-                    else
-                    {
-                        // MODO MAÑANA: Creamos el registro con el stock inicial
-                        item.Fecha = DateTime.UtcNow;
-                        // El StockFinal inicia igual al Inicial para que "Vendido" sea 0 al empezar
-                        if (item.StockFinal == 0) item.StockFinal = item.StockInicial;
-
-                        _context.InventarioDiario.Add(item);
-                    }
-                }
-
-                await _context.SaveChangesAsync();
-                return Ok(new { success = true, mensaje = "Inventario actualizado correctamente." });
+                registroExistente.StockFinal = item.StockFinal;
+                registroExistente.PrecioUnitario = item.PrecioUnitario;
             }
-            catch (Exception ex)
+            else
             {
-                return BadRequest(new { success = false, mensaje = "Error: " + ex.Message });
+                item.Id = 0;
+                if (item.StockFinal == 0) item.StockFinal = item.StockInicial;
+                _context.InventarioDiario.Add(item);
             }
+        }
+
+        await _context.SaveChangesAsync();
+        return Ok(new { success = true, mensaje = "Inventario actualizado correctamente." });
+    }
+    catch (Exception ex)
+    {
+        // Muestra el error REAL de Postgres
+        var detalle = ex.InnerException?.Message ?? ex.Message;
+        return BadRequest(new { success = false, mensaje = "Error: " + detalle });
         }
     }
 }
+}
+
+    

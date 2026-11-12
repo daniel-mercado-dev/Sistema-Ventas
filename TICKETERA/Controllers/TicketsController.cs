@@ -27,44 +27,53 @@ namespace TICKETERA.Controllers
                 return BadRequest(new { success = false, mensaje = "El pedido no tiene items." });
 
             try
-            {
-                var nuevaVenta = new VentaCabecera
-                {
-                    Fecha = DateTime.UtcNow,
-                    MetodoPago = venta.MetodoPago,
-                    MontoTotal = venta.Items.Sum(i => i.Precio * i.Cantidad),
-                    Detalles = venta.Items.Select(i => new VentaDetalle
-                    {
-                        ProductoNombre = i.Producto,// Nuevo nombre de la propiedad
-                        Cantidad = i.Cantidad,
-                        PrecioUnitario = i.Precio
-                    }).ToList()
-                };
+{
+    var nuevaVenta = new VentaCabecera
+    {
+        Fecha = DateTime.UtcNow,
+        MetodoPago = venta.MetodoPago,
+        MontoTotal = venta.Items.Sum(i => i.Precio * i.Cantidad),
+        Detalles = venta.Items.Select(i => new VentaDetalle
+        {
+            ProductoNombre = i.Producto,
+            Cantidad = i.Cantidad,
+            PrecioUnitario = i.Precio
+        }).ToList()
+    };
 
-                // Ahora Ventas es DbSet<VentaCabecera>, esto compila correctamente
-                _context.Ventas.Add(nuevaVenta);
-                await _context.SaveChangesAsync();
+    _context.Ventas.Add(nuevaVenta);
+    await _context.SaveChangesAsync();
 
-                // Imprimir recibe solo VentaCabecera, que ya tiene todo lo necesario
-                _printingService.Imprimir(nuevaVenta);
-
-                return Ok(new
-                {
-                    success = true,
-                    turno = nuevaVenta.Id,
-                    mensaje = "Venta registrada con éxito y enviada a impresión."
-                });
-            }
-            catch (Exception ex)
-            {
-                // Cambia esto temporalmente para ver el error real
-                return BadRequest(new
-                {
-                    success = false,
-                    mensaje = ex.Message,           // mensaje principal
-                    detalle = ex.InnerException?.Message  // causa raíz
-                });
-            }
-        }
+    try
+    {
+        _printingService.Imprimir(nuevaVenta);
     }
+    catch (Exception ex)
+    {
+        return Ok(new
+        {
+            success = true,
+            turno = nuevaVenta.Id,
+            mensaje = "Venta registrada, pero no se pudo imprimir: " + ex.Message
+        });
+    }
+
+    return Ok(new
+    {
+        success = true,
+        turno = nuevaVenta.Id,
+        mensaje = "Venta registrada con éxito y enviada a impresión."
+    });
+}
+catch (Exception ex)
+{
+    return BadRequest(new
+    {
+        success = false,
+        mensaje = ex.Message,
+        detalle = ex.InnerException?.Message
+    });
+}
+}
+}
 }
