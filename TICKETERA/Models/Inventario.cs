@@ -10,7 +10,7 @@ namespace TICKETERA.Models
         public int Id { get; set; }
 
         public int ProductoId { get; set; }
-        public Producto Producto { get; set; }
+        public Producto? Producto { get; set; }
 
         public int StockInicial { get; set; }
 
